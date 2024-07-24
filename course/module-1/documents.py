@@ -52,7 +52,7 @@ class BaseDocument(BaseModel):
         return parsed
 
     def save(self, **kwargs):
-        collection = _database[self._get_collection_name()]
+        collection = _database[self._get_collection_name(settings.DATABASE_NAME)]
         print("\n\n\n\n*****************collection name: ", collection)
         print("collection: ", collection)
         try:
