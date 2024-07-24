@@ -53,6 +53,7 @@ class BaseDocument(BaseModel):
 
     def save(self, **kwargs):
         collection = _database[self._get_collection_name()]
+        print("\n\n\n\n*****************collection name: ", collection)
         print("collection: ", collection)
         try:
             result = collection.insert_one(self.to_mongo(**kwargs))

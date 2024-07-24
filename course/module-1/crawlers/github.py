@@ -3,12 +3,12 @@ import os
 import shutil
 import subprocess
 import tempfile
-
+from pymongo import MongoClient
 #from aws_lambda_powertools import Logger
 
 from crawlers.base import BaseCrawler
 from documents import RepositoryDocument
-
+from config import settings
 #logger = Logger(service="decodingml/crawler")
 
 logging.basicConfig(level=logging.INFO,
@@ -24,6 +24,11 @@ class GithubCrawler(BaseCrawler):
     def __init__(self, ignore=(".git", ".toml", ".lock", ".png")) -> None:
         super().__init__()
         self._ignore = ignore
+
+        #configure mongodb connection
+        self.mongo_client = MongoClient(settings.DATABASE_HOST)
+        self.db_name = settings.DATABASE_NAME
+        self.collection_name = "repositories"
 
     def extract(self, link: str, **kwargs) -> None:
         #logger.info(f"Starting scrapping GitHub repository: {link}")
@@ -56,11 +61,23 @@ class GithubCrawler(BaseCrawler):
                         tree[file_path] = f.read().replace(" ", "")
 
             print(tree)
+            # save to mongodb
+            db = self.mongo_client[self.db_name]
+            collection = db[self.collection_name]
+            document = {
+                "name": repo_name,
+                "link": link,
+                "content": tree,
+                "owner_id": kwargs.get("user")
+            }
+            result = collection.insert_one(document)
+
             instance = self.model(
                 name=repo_name, link=link, content=tree, owner_id=kwargs.get("user")
             )
             print(instance)
             instance.save()
+            logging.info(f"Saved GitHub repository: {link}")
 
         except Exception as e:
             logging.exception(f"An error occurred while scrapping GitHub repository: {e}")
