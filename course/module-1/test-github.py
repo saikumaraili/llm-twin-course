@@ -4,10 +4,10 @@ from crawlers.github import GithubCrawler
 from documents import RepositoryDocument
 
 class TestGithubCrawler(unittest.TestCase):
-	@patch('tempfile.mkdtemp', return_value='/tmp/fake_dir')
+	@patch('tempfile.mkdtemp', return_value='/module-1/repo')
 	@patch('os.chdir')
 	@patch('subprocess.run')
-	@patch('os.walk', return_value=[('/tmp/fake_dir/repo', [], ['README.md'])])
+	@patch('os.walk', return_value=[('/module-1/repo', [], ['README.md'])])
 	@patch('builtins.open', new_callable=unittest.mock.mock_open, read_data='content')
 	@patch('shutil.rmtree')
 	@patch('logging.info')

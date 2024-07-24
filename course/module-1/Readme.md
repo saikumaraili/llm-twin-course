@@ -13,7 +13,11 @@ For each project, you can create a dedicated data directory within the project f
    ```sh
    mkdir data
    ```
-
+   
+to start mongodb
+```sh
+mongod --config /opt/homebrew/etc/mongod.conf
+```
 2. When starting MongoDB for a specific project, use the `--dbpath` option:
 
    ```sh

@@ -1,1 +1,4 @@
 selenium
+pydantic_settings
+pymongo
+bs4
