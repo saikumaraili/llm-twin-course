@@ -1,15 +1,22 @@
+import logging
 import os
 import shutil
 import subprocess
 import tempfile
 
-from aws_lambda_powertools import Logger
+#from aws_lambda_powertools import Logger
 
 from crawlers.base import BaseCrawler
 from documents import RepositoryDocument
 
-logger = Logger(service="decodingml/crawler")
+#logger = Logger(service="decodingml/crawler")
 
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler("debug.log"),
+                        logging.StreamHandler()
+                    ])
 
 class GithubCrawler(BaseCrawler):
     model = RepositoryDocument
@@ -19,7 +26,8 @@ class GithubCrawler(BaseCrawler):
         self._ignore = ignore
 
     def extract(self, link: str, **kwargs) -> None:
-        logger.info(f"Starting scrapping GitHub repository: {link}")
+        #logger.info(f"Starting scrapping GitHub repository: {link}")
+        logging.info(f"Starting scrapping GitHub repository: {link}")
 
         repo_name = link.rstrip("/").split("/")[-1]
 
@@ -28,6 +36,8 @@ class GithubCrawler(BaseCrawler):
         try:
             os.chdir(local_temp)
             subprocess.run(["git", "clone", link])
+
+            logging.info(f"Cloned {link} into {local_temp}")
 
             repo_path = os.path.join(local_temp, os.listdir(local_temp)[0])
 
@@ -49,9 +59,10 @@ class GithubCrawler(BaseCrawler):
             )
             instance.save()
 
-        except Exception:
+        except Exception as e:
+            logging.exception("An error occurred while scrapping GitHub repository: {e}")
             raise
         finally:
             shutil.rmtree(local_temp)
-
-        logger.info(f"Finished scrapping GitHub repository: {link}")
+            logging.info(f"Deleted temporary directory {local_temp}")
+        #logger.info(f"Finished scrapping GitHub repository: {link}")
