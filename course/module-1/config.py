@@ -5,8 +5,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     # MongoDB
-    DATABASE_HOST: str = "mongodb://decodingml:decodingml@decodingml_mongo:27017"
-    DATABASE_NAME: str = "twin"
+    DATABASE_HOST: str = "mongodb://localhost:27017/llm"
+    DATABASE_NAME: str = "llm"
 
     # LinkedIn Credentials
     LINKEDIN_USERNAME: str | None = None

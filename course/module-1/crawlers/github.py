@@ -32,7 +32,8 @@ class GithubCrawler(BaseCrawler):
         repo_name = link.rstrip("/").split("/")[-1]
 
         local_temp = tempfile.mkdtemp()
-
+        print(local_temp)
+        print(os.getcwd())
         try:
             os.chdir(local_temp)
             subprocess.run(["git", "clone", link])
@@ -54,13 +55,15 @@ class GithubCrawler(BaseCrawler):
                     with open(os.path.join(root, file), "r", errors="ignore") as f:
                         tree[file_path] = f.read().replace(" ", "")
 
+            print(tree)
             instance = self.model(
                 name=repo_name, link=link, content=tree, owner_id=kwargs.get("user")
             )
+            print(instance)
             instance.save()
 
         except Exception as e:
-            logging.exception("An error occurred while scrapping GitHub repository: {e}")
+            logging.exception(f"An error occurred while scrapping GitHub repository: {e}")
             raise
         finally:
             shutil.rmtree(local_temp)
