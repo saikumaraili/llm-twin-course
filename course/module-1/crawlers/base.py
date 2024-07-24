@@ -19,7 +19,7 @@ class BaseAbstractCrawler(BaseCrawler, ABC):
         options = webdriver.ChromeOptions()
         options.binary_location = "/opt/chrome/chrome"
         options.add_argument("--no-sandbox")
-        options.add_argument("--headless=new")
+        #options.add_argument("--headless=new")
         options.add_argument("--single-process")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
