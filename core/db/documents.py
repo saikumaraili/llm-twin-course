@@ -7,6 +7,7 @@ from pymongo import errors
 
 from core.db.errors import ImproperlyConfigured
 from core.db.mongo import connection
+from settings import settings
 
 _database = connection.get_database("scrabble")
 
@@ -42,7 +43,7 @@ class BaseDocument(BaseModel):
         return parsed
 
     def save(self, **kwargs):
-        collection = _database[self._get_collection_name()]
+        collection = _database[self._get_collection_name(kwargs.get("collection"))]
 
         try:
             result = collection.insert_one(self.to_mongo(**kwargs))
@@ -69,7 +70,7 @@ class BaseDocument(BaseModel):
 
     @classmethod
     def bulk_insert(cls, documents: List, **kwargs) -> Optional[List[str]]:
-        collection = _database[cls._get_collection_name()]
+        collection = _database[cls._get_collection_name("posts")]
         try:
             result = collection.insert_many(
                 [doc.to_mongo(**kwargs) for doc in documents]

@@ -35,7 +35,7 @@ class MediumCrawler(BaseAbstractCrawler):
         instance = self.model(
             platform="medium", content=data, link=link, author_id=kwargs.get("user")
         )
-        instance.save()
+        instance.save(collection="articles")
 
     def login(self):
         """Log in to Medium with Google"""

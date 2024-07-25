@@ -47,7 +47,7 @@ class GithubCrawler(BaseCrawler):
             instance = self.model(
                 name=repo_name, link=link, content=tree, owner_id=kwargs.get("user")
             )
-            instance.save()
+            instance.save(collection="repositories")
 
         except Exception:
             raise

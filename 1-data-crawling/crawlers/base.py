@@ -38,7 +38,7 @@ class BaseAbstractCrawler(BaseCrawler, ABC):
 
         self.scroll_limit = scroll_limit
         self.driver = webdriver.Chrome(
-            service=webdriver.ChromeService("/opt/chromedriver"),
+            service=webdriver.ChromeService("/Applications/chromedriver"),
             options=options,
         )
 

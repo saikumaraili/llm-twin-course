@@ -24,9 +24,25 @@ def insert_data_to_mongodb(uri, database_name, collection_name, data):
 
 
 if __name__ == "__main__":
+    # test linkedin post
     insert_data_to_mongodb(
         "mongodb://localhost:30001,localhost:30002,localhost:30003/?replicaSet=my-replica-set",
         "scrabble",
         "posts",
         {"platform": "linkedin", "content": "Test content"}
+    )
+    # test github repository
+    insert_data_to_mongodb(
+        "mongodb://localhost:30001,localhost:30002,localhost:30003/?replicaSet=my-replica-set",
+        "scrabble",
+        "repositories",
+        {"name": "test-repo", "link": "test link", "content": {"test": "content"}, "owner_id": "test"}
+    )
+
+    # test medium article
+    insert_data_to_mongodb(
+        "mongodb://localhost:30001,localhost:30002,localhost:30003/?replicaSet=my-replica-set",
+        "scrabble",
+        "articles",
+        {"platform": "medium", "content": {"Title": "Test title", "Subtitle": "Test subtitle", "Content": "Test content"}, "link": "test link", "author_id": "test"}
     )

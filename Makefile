@@ -2,8 +2,8 @@ include .env
 
 $(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' .env))
 
-AWS_CURRENT_REGION_ID := $(shell aws configure get region)
-AWS_CURRENT_ACCOUNT_ID := $(shell aws sts get-caller-identity --query "Account" --output text)
+#AWS_CURRENT_REGION_ID := $(shell aws configure get region)
+#AWS_CURRENT_ACCOUNT_ID := $(shell aws sts get-caller-identity --query "Account" --output text)
 
 PYTHONPATH := $(shell pwd)
 
