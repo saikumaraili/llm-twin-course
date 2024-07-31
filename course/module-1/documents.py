@@ -52,9 +52,9 @@ class BaseDocument(BaseModel):
         return parsed
 
     def save(self, **kwargs):
-        collection = _database[self._get_collection_name(settings.DATABASE_NAME)]
+        #collection = _database[self._get_collection_name(settings.DATABASE_NAME)]
+        collection = kwargs.get("collection")
         print("\n\n\n\n*****************collection name: ", collection)
-        print("collection: ", collection)
         try:
             result = collection.insert_one(self.to_mongo(**kwargs))
             return result.inserted_id

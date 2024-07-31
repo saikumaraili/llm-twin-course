@@ -76,7 +76,7 @@ class GithubCrawler(BaseCrawler):
                 name=repo_name, link=link, content=tree, owner_id=kwargs.get("user")
             )
             print(instance)
-            instance.save()
+            instance.save(collection=collection)
             logging.info(f"Saved GitHub repository: {link}")
 
         except Exception as e:
