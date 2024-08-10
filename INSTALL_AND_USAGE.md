@@ -50,7 +50,7 @@ Behind the scenes it will build and run all the Docker images defined in the [do
 > 127.0.0.1       mongo3
 > ```
 >
-> From what we know, on `Windows`, it `works out-of-the-box`.
+> From what we know, on `Windows`, it `works out-of-the-box`. For more details, check out this article: https://medium.com/workleap/the-only-local-mongodb-replica-set-with-docker-compose-guide-youll-ever-need-2f0b74dd8384
 
 > [!WARNING]
 > For `arm` users (e.g., `M1/M2/M3 macOS devices`), go to your Docker desktop application and enable `Use Rosetta for x86_64/amd64 emulation on Apple Silicon` from the Settings. There is a checkbox you have to check.
@@ -100,14 +100,54 @@ To check that the Qdrant `vector DB` is populated successfully, go to its dashbo
 ### Step 3: RAG retrieval step
 
 Now that we have some data in our vector DB, let's test out the RAG retriever:
+```shell
+make local-test-retriever
+```
+
+> [!IMPORTANT]
+> Before running this command, check [Qdrant's dashboard](localhost:6333/dashboard) to ensure that your vector DB is populated with data.
+
+> [!NOTE]
+> For more details on the RAG component, please refer to the [RAG](https://github.com/decodingml/llm-twin-course/blob/main/RAG.md) document. 
+
 
 ### Step 4: Generate the instruct dataset
+
+The last step, before fine-tuning is to generate an instruct dataset and track it as an artifact in Comet ML. To do so, run:
+```shell
+make generate-dataset
+```
+
+> [!IMPORTANT]
+> Now open [Comet ML](https://www.comet.com/signup/?utm_source=decoding_ml&utm_medium=partner&utm_content=github), go to your workspace, and open the `Artifacts` tab. There, you should find three artifacts as follows:
+> - `articles-instruct-dataset` 
+> - `posts-instruct-dataset`
+> - `repositories-instruct-dataset`
+
+> [!NOTE]
+> For more details on generating the instruct dataset component, please refer to the [GENERATE_INSTRUCT_DATASET](https://github.com/decodingml/llm-twin-course/blob/main/GENERATE_INSTRUCT_DATASET.md) document.
 
 
 ### Step 5: Fine-tuning
 
+For details on setting up the training pipeline on [Qwak](https://www.qwak.com/lp/end-to-end-mlops/?utm_source=github&utm_medium=referral&utm_campaign=decodingml) and running it, please refer to the [TRAINING](https://github.com/decodingml/llm-twin-course/blob/main/TRAINING.md) document.
 
 ### Step 6: Inference
 
+After you have finetuned your model, the first step is to deploy the inference pipeline to Qwak as a REST API service:
+```shell
+deploy-inference-pipeline 
+```
 
+> [!NOTE]
+> You can check out the progress of the deployment on [Qwak](https://www.qwak.com/lp/end-to-end-mlops/?utm_source=github&utm_medium=referral&utm_campaign=decodingml).
 
+After the deployment is finished (it will take a while), you can call it by calling:
+```shell
+make call-inference-pipeline
+```
+
+Ultimately, after you stop using it, make sure to delete the deployment by running:
+```shell
+make undeploy-infernece-pipeline
+```
